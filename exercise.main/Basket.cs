@@ -2,29 +2,57 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 namespace exercise.main
 {
     public class Basket
     {
         public List<Item> Items { get; }
-        public int Capacity { get; set; }
 
         public Basket()
         {
             Items = new List<Item>();
         }
 
-        public bool AddItem(Item item)
+        public bool AddItem(string name, string variant)
         {
+            Item item = Inventory.Items.Where(i => i.Name.ToLower().Equals(name.ToLower()) && i.Variant.ToLower().Equals(variant.ToLower())).FirstOrDefault();
+
+            if (item != null)
+            {
+                if (Items.Count() < BagelShop.Capacity)
+                {
+                    Items.Add(item);
+                    return true;
+                }
+            }
             return false;
         }
 
-        public bool RemoveItem(Item item)
+        public bool RemoveItem(string name, string variant)
         {
+            Item item = Inventory.Items.Where(i => i.Name.ToLower().Equals(name.ToLower()) && i.Variant.ToLower().Equals(variant.ToLower())).FirstOrDefault();
+
+            if (item != null)
+            {
+                Items.Remove(item);
+                return true;
+            }
             return false;
         }
 
-        public double GetTotalCost() { return 0; }
+        public float GetTotalCost()
+        {
+
+            float price = 0.0f;
+
+            foreach (Item i in Items)
+            {
+                price += i.Price;
+            }
+
+            return price;
+        }
     }
 }

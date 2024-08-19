@@ -5,16 +5,17 @@ using System.Text;
 
 namespace exercise.main
 {
-    public class BagelShop
+    public static class BagelShop
     {
-        private int _capacity;
-        public BagelShop(int bagCapacity)
-        {
-            _capacity = bagCapacity;
-        }
+        public static int Capacity { get; set; } = 5;
 
-        public bool ChangeCapacity(Person person, int newCapacity)
+        public static bool ChangeCapacity(string role, int newCapacity)
         {
+            if (role.Equals("manager"))
+            {
+                Capacity = newCapacity;
+                return true;
+            }
             return false;
         }
     }

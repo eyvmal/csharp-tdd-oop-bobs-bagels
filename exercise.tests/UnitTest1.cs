@@ -13,13 +13,12 @@ public class Tests
     public void AddBagelTest()
     {
         Basket basket = new Basket();
-        Bagel bagel = new Bagel();
-        bool result = basket.AddItem(bagel);
+        bool result = basket.AddItem("Bagel", "Onion");
 
         List<Item> expected = new List<Item>();
-        expected.Add(bagel);
+        expected.Add(new Bagel("BGLO", 0.49f, "Onion"));
 
-        Assert.That(basket.Items, Is.EqualTo(expected));
+        Assert.That(basket.Items.Count(), Is.EqualTo(1));
         Assert.That(result, Is.True);
     }
 
@@ -27,28 +26,32 @@ public class Tests
     public void RemoveBagelTest()
     {
         Basket basket = new Basket();
-        Bagel bagel = new Bagel();
-        basket.AddItem(bagel);
-        basket.AddItem(bagel);
-        bool result = basket.RemoveItem(bagel);
+        basket.AddItem("Bagel", "Onion");
+        bool result = basket.RemoveItem("Bagel", "Onion");
 
-        List<Item> expected = new List<Item>();
-        expected.Add(bagel);
-
-        Assert.That(basket.Items, Is.EqualTo(expected));
+        Assert.That(basket.Items.Count(), Is.EqualTo(0));
         Assert.That(result, Is.True);
     }
 
     [Test]
-    public void GetTotalPriceTest()
+    public void GetTotalCostTest()
     {
-        Assert.Pass();
+        Basket basket = new Basket();
+        basket.AddItem("Bagel", "Onion");
+
+        float price = basket.GetTotalCost();
+
+        Assert.That(price, Is.EqualTo(0.49f));
     }
 
     [Test]
     public void ChangeCapacityTest()
     {
-        Assert.Pass();
+        Basket basket = new Basket();
+
+        Assert.That(BagelShop.Capacity, Is.EqualTo(5));
+        BagelShop.ChangeCapacity("manager", 3);
+        Assert.That(BagelShop.Capacity, Is.EqualTo(3));
     }
 
     [Test]

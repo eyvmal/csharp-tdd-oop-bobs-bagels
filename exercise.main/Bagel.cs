@@ -9,9 +9,17 @@ namespace exercise.main
     {
 
         public string Code { get; set; }
-        public double Price { get; set; }
+        public float Price { get; set; }
         public string Name { get; set; }
         public string Variant { get; set; }
+
+        public Bagel(string code, float price, string variant)
+        {
+            Code = code;
+            Price = price;
+            Name = "Bagel";
+            Variant = variant;
+        }
 
         public bool AddFilling(Filling filling)
         {
@@ -28,7 +36,7 @@ namespace exercise.main
             return false;
         }
 
-        public double GetBagelPrice() { return Price; }
+        public double GetPrice() { return Price + GetFillingsPrice(); }
 
         public double GetFillingsPrice() { return 0; }
     }
