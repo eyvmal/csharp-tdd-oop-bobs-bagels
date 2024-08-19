@@ -57,13 +57,52 @@ public class Tests
     [Test]
     public void AddFillingTest()
     {
-        Assert.Pass();
+        Bagel bagel = new Bagel("BGLO", 0.49f, "Onion");
+        bool result = bagel.AddFilling("ham");
+
+        Assert.That(result, Is.True);
+        Assert.That(bagel.Fillings.Count(), Is.EqualTo(1));
+    }
+    [Test]
+    public void RemoveFillingTest()
+    {
+        Basket basket = new Basket();
+        Bagel bagel = new Bagel("BGLO", 0.49f, "Onion");
+        bagel.AddFilling("ham");
+        bagel.RemoveFilling("ham");
+
+        Item ham = basket.SelectItem("filling", "ham");
+        bool result = bagel.Fillings.Contains(ham);
+
+        Assert.That(result, Is.False);
+        Assert.That(bagel.Fillings.Count(), Is.EqualTo(0));
     }
 
     [Test]
     public void ChangeFillingTest()
     {
-        Assert.Pass();
+        Basket basket = new Basket();
+        Bagel bagel = new Bagel("BGLO", 0.49f, "Onion");
+        bagel.AddFilling("ham");
+
+        Item ham = basket.SelectItem("filling", "ham");
+        bool result = bagel.Fillings.Contains(ham);
+
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public void GetFillingsPriceTest()
+    {
+        Basket basket = new Basket();
+        Bagel bagel = new Bagel("BGLO", 0.49f, "Onion");
+        bagel.AddFilling("ham");
+        bagel.AddFilling("Egg");
+        bagel.AddFilling("Cheese");
+
+        float price = bagel.GetFillingsPrice();
+
+        Assert.That(price, Is.EqualTo((float)Math.Round(0.36f, 2)));
     }
 
 }

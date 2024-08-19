@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace exercise.main
 
         public bool AddItem(string name, string variant)
         {
-            Item item = Inventory.Items.Where(i => i.Name.ToLower().Equals(name.ToLower()) && i.Variant.ToLower().Equals(variant.ToLower())).FirstOrDefault();
+            Item item = SelectItem(name, variant);
 
             if (item != null)
             {
@@ -32,7 +33,7 @@ namespace exercise.main
 
         public bool RemoveItem(string name, string variant)
         {
-            Item item = Inventory.Items.Where(i => i.Name.ToLower().Equals(name.ToLower()) && i.Variant.ToLower().Equals(variant.ToLower())).FirstOrDefault();
+            Item item = SelectItem(name, variant);
 
             if (item != null)
             {
@@ -53,6 +54,11 @@ namespace exercise.main
             }
 
             return price;
+        }
+
+        public Item SelectItem(string name, string variant)
+        {
+            return Inventory.Items.Where(i => i.Name.ToLower().Equals(name.ToLower()) && i.Variant.ToLower().Equals(variant.ToLower())).FirstOrDefault();
         }
     }
 }
