@@ -15,4 +15,6 @@ Bagel			AddFilling(Filling filling)					Add a new filling							true if successf
 Bagel			RemoveFilling(Filling filling)				Remove a filling							true if successful
 																										false if it doesnt exist
 Bagel			GetFillingsPrice()							Get the price of all available fillings		List of fillings and price
-Basket			GetDiscounts()								Gets the discount of the basket				dictionary of SKU and discount for that item
+Basket			GetDiscounts()								Gets the discount of the items in basket	dictionary of SKU and discount for that item
+Receipt			GenerateReceipt()							Generates the receipt as a string			string of receipt
+Receipt			PrintReceipt()								Prints the previously generated receipt		void

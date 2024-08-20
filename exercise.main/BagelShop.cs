@@ -8,6 +8,7 @@ namespace exercise.main
     public static class BagelShop
     {
         public static int Capacity { get; set; } = 5;
+        public static string Name { get; set; } = "Bob's Bagels";
 
         public static bool ChangeCapacity(string role, int newCapacity)
         {
