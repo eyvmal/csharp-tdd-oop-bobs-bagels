@@ -105,14 +105,14 @@ public class Tests
         Assert.That(price, Is.EqualTo(0.36m));
     }
 
-    [TestCase(1, 1.25)]
-    [TestCase(6, 2.49)]
-    [TestCase(7, 3.74)]
-    [TestCase(12, 3.99)]
-    [TestCase(13, 5.24)]
-    [TestCase(18, 6.48)]
-    [TestCase(19, 7.73)]
-    [TestCase(24, 7.98)]
+    [TestCase(1, 0.23)]
+    [TestCase(6, 0.45)]
+    [TestCase(7, 0.68)]
+    [TestCase(12, 1.89)]
+    [TestCase(13, 2.12)]
+    [TestCase(18, 2.34)]
+    [TestCase(19, 2.57)]
+    [TestCase(24, 3.78)]
     public void GetDiscountsTest(int amount, decimal expected)
     {
         Basket basket = new Basket();

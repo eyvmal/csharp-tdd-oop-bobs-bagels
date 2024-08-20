@@ -6,7 +6,10 @@ Console.WriteLine("Hello, World!");
 Basket b = new Basket();
 BagelShop.ChangeCapacity("manager", 25);
 
-b.AddItem("bagel", "onion");
+for (int i = 0; i < 10; i++)
+{
+    b.AddItem("bagel", "onion");
+}
 b.AddItem("coffee", "black");
 b.AddItem("bagel", "onion");
 b.AddItem("coffee", "lattee");
