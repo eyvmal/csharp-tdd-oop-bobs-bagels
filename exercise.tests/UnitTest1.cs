@@ -107,11 +107,16 @@ public class Tests
 
     [TestCase(1, 1.25)]
     [TestCase(6, 2.49)]
+    [TestCase(7, 3.74)]
     [TestCase(12, 3.99)]
+    [TestCase(13, 5.24)]
+    [TestCase(18, 6.48)]
+    [TestCase(19, 7.73)]
+    [TestCase(24, 7.98)]
     public void GetDiscountsTest(int amount, decimal expected)
     {
         Basket basket = new Basket();
-        BagelShop.ChangeCapacity("manager", 15);
+        BagelShop.ChangeCapacity("manager", 25);
         basket.AddItem("coffee", "black");
         for (int i = 0; i < amount; i++)
         {

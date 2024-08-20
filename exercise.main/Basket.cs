@@ -91,23 +91,27 @@ namespace exercise.main
                 {
                     int amount = cpyItems.Where(x => x.Code.Equals(item.Code)).Count();
                     decimal discount = 0m;
-                    if (amount >= 12)
+                    int totalItemsToRemove = 0;
+                    if (amount >= 12) // Check for dozens
                     {
                         int dozens = amount / 12;
                         discount += dozens * 3.99m;
+                        totalItemsToRemove += dozens * 12;
                         amount -= dozens * 12;
-
-                        cpyItems.RemoveAll(x => x.Code.Equals(item.Code) && dozens-- > 0);
                     }
-                    if (amount >= 6)
+                    if (amount >= 6) // Check for half dozens
                     {
                         int halfDozens = amount / 6;
                         discount += halfDozens * 2.49m;
-                        amount -= halfDozens * 6;
-
-                        cpyItems.RemoveAll(x => x.Code.Equals(item.Code) && halfDozens-- > 0);
+                        totalItemsToRemove += halfDozens * 6;
                     }
-                    discounts[item.Code] = discount;
+                    // Remove items
+                    for (int i = 0; i < totalItemsToRemove; i++)
+                    {
+                        cpyItems.Remove(cpyItems.First(x => x.Code.Equals(item.Code)));
+                    }
+                    // Add discount
+                    if (discount > 0) discounts[item.Code] = discount;
                 }
                 else if (item.Code.Equals("COFB"))
                 {
@@ -115,7 +119,7 @@ namespace exercise.main
                     int bagel = cpyItems.Where(x => x.Name.Equals("Bagel")).Count();
                     int lower = Math.Min(coffee, bagel);
 
-                    discounts[item.Code] = 1.25m * lower;
+                    if (lower > 0) discounts[item.Code] = 1.25m * lower;
                 }
             }
             return discounts;
