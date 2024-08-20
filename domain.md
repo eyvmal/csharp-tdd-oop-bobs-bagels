@@ -5,8 +5,8 @@ Basket			RemoveBagel(string name, string variant)	Remove an item from the basket
 																										false if bagel doesnt exist
 BagelShop		ChangeCapacity()							A manager can change capacaites of baskets	true if manager
 																										false if not manager
-Basket			GetTotalPrice()								Get the total cost of the basket			float of total price
-Bagel			GetPrice()									Get the price of an item					float of price
+Basket			GetTotalPrice()								Get the total cost of the basket			decimal of total price
+Bagel			GetPrice()									Get the price of an item					decimal of price
 Bagel			ChangeFilling(Filling oldF, Filling newF)	Change the old filling for a new			true if succesful
 																										false it either doesnt exist
 Bagel			AddFilling(Filling filling)					Add a new filling							true if successful
@@ -15,3 +15,4 @@ Bagel			AddFilling(Filling filling)					Add a new filling							true if successf
 Bagel			RemoveFilling(Filling filling)				Remove a filling							true if successful
 																										false if it doesnt exist
 Bagel			GetFillingsPrice()							Get the price of all available fillings		List of fillings and price
+Basket			GetDiscounts()								Gets the discount of the basket				dictionary of SKU and discount for that item

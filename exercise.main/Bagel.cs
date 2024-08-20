@@ -10,12 +10,12 @@ namespace exercise.main
     {
 
         public string Code { get; set; }
-        public float Price { get; set; }
+        public decimal Price { get; set; }
         public string Name { get; set; }
         public string Variant { get; set; }
         public List<Item> Fillings { get; set; }
 
-        public Bagel(string code, float price, string variant)
+        public Bagel(string code, decimal price, string variant)
         {
             Code = code;
             Price = price;
@@ -62,13 +62,13 @@ namespace exercise.main
             return false;
         }
 
-        public float GetPrice() { return Price + GetFillingsPrice(); }
+        public decimal GetPrice() { return Price + GetFillingsPrice(); }
 
-        public float GetFillingsPrice()
+        public decimal GetFillingsPrice()
         {
-            float price = Fillings.Sum(f => f.Price);
+            decimal price = Fillings.Sum(f => f.Price);
 
-            return (float)Math.Round(price, 2);
+            return price;
         }
     }
 }
