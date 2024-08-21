@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace exercise.main
+﻿namespace exercise.main
 {
     public static class Inventory
     {
-        public static List<Item> Items { get; set; } = new List<Item> {
+        public static List<IProduct> Stock { get; } = new List<IProduct> {
             new Bagel("BGLO", 0.49m, "Onion"),
             new Bagel("BGLP", 0.39m, "Plain"),
             new Bagel("BGLE", 0.49m, "Everything"),
             new Bagel("BGLS", 0.49m, "Sesame"),
             new Coffee("COFB", 0.99m, "Black"),
             new Coffee("COFW", 1.19m, "White"),
-            new Coffee("COFC", 1.29m, "Capuccino"),
+            new Coffee("COFC", 1.29m, "Cappuccino"),
             new Coffee("COFL", 1.29m, "Latte"),
             new Filling("FILB", 0.12m, "Bacon"),
             new Filling("FILE", 0.12m, "Egg"),

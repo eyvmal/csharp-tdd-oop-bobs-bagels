@@ -1,96 +1,76 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
-
-namespace exercise.main
+﻿namespace exercise.main
 {
     public class Basket
     {
-        public List<Item> Items { get; }
+        public List<IProduct> Products { get; }
 
         public Basket()
         {
-            Items = new List<Item>();
+            Products = new List<IProduct>();
         }
 
-        public bool AddItem(string name, string variant)
+        public bool AddProduct(string name, string variant)
         {
-            Item item = SelectItemFromInventory(name, variant);
+            var product = SelectProductFromInventory(name, variant);
 
-            if (item != null)
+            if (product == null) return false;
+            if (Products.Count() >= BagelShop.Capacity) return false;
+            switch (product.Name)
             {
-                if (Items.Count() < BagelShop.Capacity)
-                {
-                    if (item.Name.Equals("Bagel"))
-                    {
-                        Items.Add(new Bagel(item.Code, item.Price, item.Variant));
-                        return true;
-                    }
-                    else if (item.Name.Equals("Coffee"))
-                    {
-                        Items.Add(new Coffee(item.Code, item.Price, item.Variant));
-                        return true;
-                    }
-                    else if (item.Name.Equals("Filling"))
-                    {
-                        Items.Add(new Filling(item.Code, item.Price, item.Variant));
-                        return true;
-                    }
+                case "Bagel":
+                    Products.Add(new Bagel(product.Code, product.Price, product.Variant));
+                    return true;
+                case "Coffee":
+                    Products.Add(new Coffee(product.Code, product.Price, product.Variant));
+                    return true;
+                case "Filling":
+                    Products.Add(new Filling(product.Code, product.Price, product.Variant));
+                    return true;
+                default:
                     return false;
-                }
             }
-            return false;
         }
 
-        public bool RemoveItem(string name, string variant)
+        public bool RemoveProduct(string name, string variant)
         {
-            Item item = SelectItemFromBasket(name, variant);
+            var product = SelectProductFromBasket(name, variant);
 
-            if (item != null)
-            {
-                Items.Remove(item);
-                return true;
-            }
-            return false;
+            if (product == null) return false;
+            Products.Remove(product);
+            return true;
         }
 
         public decimal GetTotalCost()
         {
-
             decimal price = 0;
-
-            foreach (Item i in Items)
+            foreach (var p in Products)
             {
-                price += i.Price;
+                price += p.Price;
             }
-
             return price;
         }
 
-        public Item SelectItemFromInventory(string name, string variant)
+        public IProduct SelectProductFromInventory(string name, string variant)
         {
-            return Inventory.Items.Where(i => i.Name.ToLower().Equals(name.ToLower()) && i.Variant.ToLower().Equals(variant.ToLower())).FirstOrDefault();
+            return Inventory.Stock.FirstOrDefault(x => x.Name.ToLower().Equals(name.ToLower()) && x.Variant.ToLower().Equals(variant.ToLower()))!;
         }
 
-        public Item SelectItemFromBasket(string name, string variant)
+        public IProduct SelectProductFromBasket(string name, string variant)
         {
-            return Items.Where(i => i.Name.ToLower().Equals(name.ToLower()) && i.Variant.ToLower().Equals(variant.ToLower())).FirstOrDefault();
+            return Products.FirstOrDefault(x => x.Name.ToLower().Equals(name.ToLower()) && x.Variant.ToLower().Equals(variant.ToLower()))!;
         }
 
         public Dictionary<string, decimal> GetDiscounts()
         {
-            Dictionary<string, decimal> discounts = new Dictionary<string, decimal> { { "null", 0 } };
-            List<Item> cpyItems = new List<Item>(Items);
+            var discounts = new Dictionary<string, decimal> { { "null", 0 } };
+            var cpyProducts = new List<IProduct>(Products);
 
-            foreach (Item item in Inventory.Items)
+            foreach (var product in Inventory.Stock)
             {
                 decimal discount = 0m;
-                if (item.Name.Equals("Bagel"))
+                if (product.Name.Equals("Bagel"))
                 {
-                    int amount = cpyItems.Where(x => x.Code.Equals(item.Code)).Count();
+                    int amount = cpyProducts.Where(x => x.Code.Equals(product.Code)).Count();
                     int totalItemsToRemove = 0;
                     if (amount >= 12) // Check for dozens
                     {
@@ -108,19 +88,19 @@ namespace exercise.main
                     // Remove items
                     for (int i = 0; i < totalItemsToRemove; i++)
                     {
-                        cpyItems.Remove(cpyItems.First(x => x.Code.Equals(item.Code)));
+                        cpyProducts.Remove(cpyProducts.First(x => x.Code.Equals(product.Code)));
                     }
                     // Add discount
                 }
-                else if (item.Code.Equals("COFB"))
+                else if (product.Code.Equals("COFB"))
                 {
-                    int coffee = cpyItems.Where(x => x.Code.Equals(item.Code)).Count();
-                    int bagel = cpyItems.Where(x => x.Name.Equals("Bagel")).Count();
-                    int lower = Math.Min(coffee, bagel);
+                    var coffee = cpyProducts.Count(x => x.Code.Equals(product.Code));
+                    var bagel = cpyProducts.Count(x => x.Name.Equals("Bagel"));
+                    var lower = Math.Min(coffee, bagel);
 
                     if (lower > 0) discount = 0.23m * lower;
                 }
-                if (discount > 0) discounts[item.Code] = discount;
+                if (discount > 0) discounts[product.Code] = discount;
             }
             return discounts;
         }

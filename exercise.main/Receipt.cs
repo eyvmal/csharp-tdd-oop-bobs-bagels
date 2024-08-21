@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace exercise.main
 {
@@ -12,7 +8,7 @@ namespace exercise.main
         private string _shopName;
         private decimal _totalPrice;
         private decimal _totalDiscount;
-        private List<Item> _items;
+        private List<IProduct> _items;
         private Dictionary<string, decimal> _discounts;
         private string _receipt;
 
@@ -20,7 +16,7 @@ namespace exercise.main
         {
             _receiptDate = DateTime.Now;
             _shopName = BagelShop.Name;
-            _items = basket.Items;
+            _items = basket.Products;
             _totalPrice = basket.GetTotalCost();
             _discounts = basket.GetDiscounts();
             _totalDiscount = _discounts.Sum(x => x.Value);

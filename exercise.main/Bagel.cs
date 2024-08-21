@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
-
-namespace exercise.main
+﻿namespace exercise.main
 {
-    public class Bagel : Item
+    public class Bagel : IProduct
     {
 
         public string Code { get; set; }
         public decimal Price { get; set; }
         public string Name { get; set; }
         public string Variant { get; set; }
-        public List<Item> Fillings { get; set; }
+        public List<IProduct> Fillings { get; set; }
 
         public Bagel(string code, decimal price, string variant)
         {
@@ -21,52 +15,43 @@ namespace exercise.main
             Price = price;
             Name = "Bagel";
             Variant = variant;
-            Fillings = new List<Item>();
+            Fillings = new List<IProduct>();
         }
 
         public bool AddFilling(string variant)
         {
-            Item item = Inventory.Items.Where(i => i.Name.ToLower().Equals("filling") && i.Variant.ToLower().Equals(variant.ToLower())).FirstOrDefault();
+            var product = Inventory.Stock.FirstOrDefault(x => x.Name.Equals("Filling") && x.Variant.ToLower().Equals(variant.ToLower()))!;
 
-            if (item != null)
-            {
-                Fillings.Add(item);
-                return true;
-            }
-            return false;
+            if (product == null) return false;
+            Fillings.Add(product);
+            return true;
         }
 
         public bool RemoveFilling(string variant)
         {
-            Item item = Inventory.Items.Where(i => i.Name.ToLower().Equals("filling") && i.Variant.ToLower().Equals(variant.ToLower())).FirstOrDefault();
+            var product = Inventory.Stock.FirstOrDefault(x => x.Name.Equals("Filling") && x.Variant.ToLower().Equals(variant.ToLower()))!;
 
-            if (item != null)
-            {
-                Fillings.Remove(item);
-                return true;
-            }
-            return false;
+            if (product == null) return false;
+            Fillings.Remove(product);
+            return true;
         }
 
         public bool ChangeFilling(string oldFilling, string newFilling)
         {
-            Item oldFill = Inventory.Items.Where(i => i.Name.ToLower().Equals("filling") && i.Variant.ToLower().Equals(oldFilling.ToLower())).FirstOrDefault();
-            Item newFill = Inventory.Items.Where(i => i.Name.ToLower().Equals("filling") && i.Variant.ToLower().Equals(newFilling.ToLower())).FirstOrDefault();
+            var oldFill = Inventory.Stock.FirstOrDefault(x => x.Name.ToLower().Equals("filling") && x.Variant.ToLower().Equals(oldFilling.ToLower()));
+            var newFill = Inventory.Stock.FirstOrDefault(x => x.Name.ToLower().Equals("filling") && x.Variant.ToLower().Equals(newFilling.ToLower()));
 
-            if (oldFill != null && newFill != null)
-            {
-                Fillings.Remove(oldFill);
-                Fillings.Add(newFill);
-                return true;
-            }
-            return false;
+            if (oldFill == null || newFill == null) return false;
+            Fillings.Remove(oldFill);
+            Fillings.Add(newFill);
+            return true;
         }
 
         public decimal GetPrice() { return Price + GetFillingsPrice(); }
 
         public decimal GetFillingsPrice()
         {
-            decimal price = Fillings.Sum(f => f.Price);
+            var price = Fillings.Sum(f => f.Price);
 
             return price;
         }

@@ -10,25 +10,25 @@ public class Tests
     }
 
     [TestCase("Onion", 1, true)]
-    [TestCase("Chesseburger", 0, false)]
+    [TestCase("Cheeseburger", 0, false)]
     public void AddBagelTest(string variant, int amount, bool expected)
     {
-        Basket basket = new Basket();
-        bool result = basket.AddItem("Bagel", variant);
+        var basket = new Basket();
+        var result = basket.AddProduct("Bagel", variant);
 
-        Assert.That(basket.Items.Count(), Is.EqualTo(amount));
+        Assert.That(basket.Products.Count(), Is.EqualTo(amount));
         Assert.That(result, Is.EqualTo(expected));
     }
 
     [TestCase("Onion", 0, true)]
-    [TestCase("Chesseburger", 1, false)]
+    [TestCase("Cheeseburger", 1, false)]
     public void RemoveBagelTest(string variant, int amount, bool expected)
     {
-        Basket basket = new Basket();
-        basket.AddItem("Bagel", "Onion");
-        bool result = basket.RemoveItem("Bagel", variant);
+        var basket = new Basket();
+        basket.AddProduct("Bagel", "Onion");
+        var result = basket.RemoveProduct("Bagel", variant);
 
-        Assert.That(basket.Items.Count(), Is.EqualTo(amount));
+        Assert.That(basket.Products.Count(), Is.EqualTo(amount));
         Assert.That(result, Is.EqualTo(expected));
     }
 
@@ -36,10 +36,10 @@ public class Tests
     [TestCase("Plain", 0.39)]
     public void GetTotalCostTest(string variant, decimal expected)
     {
-        Basket basket = new Basket();
-        basket.AddItem("Bagel", variant);
+        var basket = new Basket();
+        basket.AddProduct("Bagel", variant);
 
-        decimal price = basket.GetTotalCost();
+        var price = basket.GetTotalCost();
 
         Assert.That(price, Is.EqualTo(expected));
     }
@@ -47,8 +47,6 @@ public class Tests
     [Test]
     public void ChangeCapacityTest()
     {
-        Basket basket = new Basket();
-
         Assert.That(BagelShop.Capacity, Is.EqualTo(5));
         BagelShop.ChangeCapacity("manager", 3);
         Assert.That(BagelShop.Capacity, Is.EqualTo(3));
@@ -57,8 +55,8 @@ public class Tests
     [Test]
     public void AddFillingTest()
     {
-        Bagel bagel = new Bagel("BGLO", 0.49m, "Onion");
-        bool result = bagel.AddFilling("ham");
+        var bagel = new Bagel("BGLO", 0.49m, "Onion");
+        var result = bagel.AddFilling("ham");
 
         Assert.That(result, Is.True);
         Assert.That(bagel.Fillings.Count(), Is.EqualTo(1));
@@ -66,13 +64,13 @@ public class Tests
     [Test]
     public void RemoveFillingTest()
     {
-        Basket basket = new Basket();
-        Bagel bagel = new Bagel("BGLO", 0.49m, "Onion");
+        var basket = new Basket();
+        var bagel = new Bagel("BGLO", 0.49m, "Onion");
         bagel.AddFilling("ham");
         bagel.RemoveFilling("ham");
 
-        Item ham = basket.SelectItemFromInventory("filling", "ham");
-        bool result = bagel.Fillings.Contains(ham);
+        var ham = basket.SelectProductFromInventory("filling", "ham");
+        var result = bagel.Fillings.Contains(ham);
 
         Assert.That(result, Is.False);
         Assert.That(bagel.Fillings.Count(), Is.EqualTo(0));
@@ -81,12 +79,12 @@ public class Tests
     [Test]
     public void ChangeFillingTest()
     {
-        Basket basket = new Basket();
-        Bagel bagel = new Bagel("BGLO", 0.49m, "Onion");
+        var basket = new Basket();
+        var bagel = new Bagel("BGLO", 0.49m, "Onion");
         bagel.AddFilling("ham");
 
-        Item ham = basket.SelectItemFromInventory("filling", "ham");
-        bool result = bagel.Fillings.Contains(ham);
+        var ham = basket.SelectProductFromInventory("filling", "ham");
+        var result = bagel.Fillings.Contains(ham);
 
         Assert.That(result, Is.True);
     }
@@ -94,13 +92,12 @@ public class Tests
     [Test]
     public void GetFillingsPriceTest()
     {
-        Basket basket = new Basket();
-        Bagel bagel = new Bagel("BGLO", 0.49m, "Onion");
+        var bagel = new Bagel("BGLO", 0.49m, "Onion");
         bagel.AddFilling("ham");
         bagel.AddFilling("Egg");
         bagel.AddFilling("Cheese");
 
-        decimal price = bagel.GetFillingsPrice();
+        var price = bagel.GetFillingsPrice();
 
         Assert.That(price, Is.EqualTo(0.36m));
     }
@@ -115,16 +112,14 @@ public class Tests
     [TestCase(24, 3.78)]
     public void GetDiscountsTest(int amount, decimal expected)
     {
-        Basket basket = new Basket();
+        var basket = new Basket();
         BagelShop.ChangeCapacity("manager", 25);
-        basket.AddItem("coffee", "black");
-        for (int i = 0; i < amount; i++)
+        basket.AddProduct("coffee", "black");
+        for (var i = 0; i < amount; i++)
         {
-            basket.AddItem("bagel", "onion");
+            basket.AddProduct("bagel", "onion");
         }
-
-        Dictionary<string, decimal> discounts = basket.GetDiscounts();
-
+        var discounts = basket.GetDiscounts();
         Assert.That(discounts.Sum(x => x.Value), Is.EqualTo(expected));
     }
 
