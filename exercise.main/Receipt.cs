@@ -33,12 +33,35 @@ namespace exercise.main
 
             var groupedItems = _items
                 .GroupBy(item => new { item.Name, item.Variant })
-                .Select(group => new
+                .Select(group =>
                 {
-                    Code = group.First().Code,
-                    Name = $"{group.Key.Variant} {group.Key.Name}",
-                    Quantity = group.Count(),
-                    TotalPrice = group.Sum(item => item.Price)
+                    var firstItem = group.First();
+                    var isBagel = firstItem.Code.StartsWith("BGL");
+
+                    List<IProduct> fillings = isBagel
+                        ? group.OfType<Bagel>()
+                            .SelectMany(x => x.Fillings)
+                            .ToList()
+                        : new List<IProduct>();
+                    
+                    var groupedFillings = fillings.GroupBy(x => x.Variant)
+                        .Select(fillingGroup => new
+                        {
+                            Variant = fillingGroup.Key,
+                            Quantity = fillingGroup.Count(),
+                            TotalPrice = fillingGroup.Sum(x => x.Price)
+                        });
+                    
+                    _totalPrice += groupedFillings.Sum(filling => filling.TotalPrice);
+                    
+                    return new
+                    {
+                        Code = group.First().Code,
+                        Name = $"{group.Key.Variant} {group.Key.Name}",
+                        Quantity = group.Count(),
+                        TotalPrice = group.Sum(item => item.Price),
+                        Fillings = groupedFillings,
+                    };
                 })
                 .OrderBy(item => item.Name);
 
@@ -48,6 +71,11 @@ namespace exercise.main
                 if (_discounts.ContainsKey(item.Code))
                 {
                     sb.AppendLine($"                       (-£{_discounts[item.Code]})");
+                }
+
+                foreach (var filling in item.Fillings)
+                {
+                    sb.AppendLine($" \u21b3 {filling.Variant.PadRight(17)} {filling.Quantity.ToString().PadRight(3)} £{filling.TotalPrice:F2}");
                 }
             }
 

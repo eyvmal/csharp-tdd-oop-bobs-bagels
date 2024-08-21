@@ -76,17 +76,17 @@ public class Tests
         Assert.That(bagel.Fillings.Count(), Is.EqualTo(0));
     }
 
-    [Test]
-    public void ChangeFillingTest()
+    [TestCase("Bacon", true)]
+    [TestCase("Helicopter", false)]
+    public void ChangeFillingTest(string a, bool expected)
     {
         var basket = new Basket();
         var bagel = new Bagel("BGLO", 0.49m, "Onion");
         bagel.AddFilling("ham");
 
-        var ham = basket.SelectProductFromInventory("filling", "ham");
-        var result = bagel.Fillings.Contains(ham);
+        var result = bagel.ChangeFilling("ham", a);
 
-        Assert.That(result, Is.True);
+        Assert.That(bagel.Fillings.Any(x => x.Variant == a), Is.EqualTo(expected));
     }
 
     [Test]

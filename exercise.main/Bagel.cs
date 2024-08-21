@@ -23,13 +23,13 @@
             var product = Inventory.Stock.FirstOrDefault(x => x.Name.Equals("Filling") && x.Variant.ToLower().Equals(variant.ToLower()))!;
 
             if (product == null) return false;
-            Fillings.Add(product);
+            Fillings.Add(new Filling(product.Code, product.Price, product.Variant));
             return true;
         }
 
         public bool RemoveFilling(string variant)
         {
-            var product = Inventory.Stock.FirstOrDefault(x => x.Name.Equals("Filling") && x.Variant.ToLower().Equals(variant.ToLower()))!;
+            var product = Fillings.FirstOrDefault(x => x.Name.Equals("Filling") && x.Variant.ToLower().Equals(variant.ToLower()))!;
 
             if (product == null) return false;
             Fillings.Remove(product);
@@ -38,13 +38,9 @@
 
         public bool ChangeFilling(string oldFilling, string newFilling)
         {
-            var oldFill = Inventory.Stock.FirstOrDefault(x => x.Name.ToLower().Equals("filling") && x.Variant.ToLower().Equals(oldFilling.ToLower()));
-            var newFill = Inventory.Stock.FirstOrDefault(x => x.Name.ToLower().Equals("filling") && x.Variant.ToLower().Equals(newFilling.ToLower()));
-
-            if (oldFill == null || newFill == null) return false;
-            Fillings.Remove(oldFill);
-            Fillings.Add(newFill);
-            return true;
+            var remove = RemoveFilling(oldFilling);
+            var add = AddFilling(newFilling);
+            return remove && add;
         }
 
         public decimal GetPrice() { return Price + GetFillingsPrice(); }
